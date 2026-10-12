@@ -34,6 +34,8 @@ export default function CartPage() {
         return acc + current.price * current.quantity;
     }, 0);
 
+
+
     return (
         <div className="mx-auto max-w-4xl px-6 py-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -69,9 +71,34 @@ export default function CartPage() {
                                 Unit price: ${item.price.toFixed(2)}
                             </p>
 
-                            <p className="mt-1 text-sm text-slate-600">
-                                Quantity: {item.quantity}
-                            </p>
+                            <div className="flex items-center justify-center gap-2 border rounded-2xl bg-white">
+                                <button
+                                    className="py-2 bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-xl w-8 box-border"
+                                    onClick={()=> {
+                                    if (item.quantity > 1)
+                                    {
+                                        dispatch({
+                                            type: "UPDATE_QUANTITY",
+                                            payload: {id: item.id, quantity: item.quantity-1 },
+                                        })
+                                    } else {
+                                        dispatch({
+                                            type: "REMOVE_ITEM",
+                                            payload: {id: item.id}
+                                        })
+                                }
+                                }}>-</button>
+                                <p>{item.quantity}</p>
+                                <button
+                                    className="py-2 bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-xl w-8 box-border"
+                                    onClick={()=> {
+                                        dispatch({
+                                            type: "UPDATE_QUANTITY",
+                                            payload: {id: item.id, quantity: item.quantity + 1}
+                                        })
+                                    }}
+                                >+</button>
+                            </div>
                         </div>
 
                         <div className="flex items-center justify-between gap-4 sm:justify-end">
@@ -81,6 +108,12 @@ export default function CartPage() {
 
                             <button
                                 type="button"
+                                onClick={() =>
+                                    dispatch({
+                                        type: "REMOVE_ITEM",
+                                        payload: { id: item.id },
+                                    })
+                                }
                                 className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
                             >
                                 Remove
@@ -109,7 +142,7 @@ export default function CartPage() {
                     disabled
                     className="mt-6 w-full cursor-not-allowed rounded-lg bg-slate-300 px-5 py-3 font-semibold text-slate-600 sm:w-auto sm:min-w-48"
                 >
-                    Checkout (Coming Soon)
+                    Checkout
                 </button>
             </div>
         </div>
