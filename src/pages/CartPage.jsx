@@ -34,8 +34,6 @@ export default function CartPage() {
         return acc + current.price * current.quantity;
     }, 0);
 
-
-
     return (
         <div className="mx-auto max-w-4xl px-6 py-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -137,13 +135,12 @@ export default function CartPage() {
                     Shipping and taxes calculated at checkout.
                 </p>
 
-                <button
+                <Link
                     type="button"
-                    disabled
-                    className="mt-6 w-full cursor-not-allowed rounded-lg bg-slate-300 px-5 py-3 font-semibold text-slate-600 sm:w-auto sm:min-w-48"
-                >
+                    className="mt-6 w-full rounded-lg bg-slate-300 px-5 py-3 font-semibold text-slate-600 sm:w-auto sm:min-w-48"
+                 to="/checkout">
                     Checkout
-                </button>
+                </Link>
             </div>
         </div>
     );
