@@ -2,11 +2,11 @@ import { it, expect, describe } from 'vitest';
 import {CartReducer} from "./CartContext.jsx";
 
 
-describe('CartContext', () => {
-    it('adds a new item to the cart with a quantity of 1', () => {
+describe("CartContext", () => {
+    it("adds a new item to the cart with a quantity of 1", () => {
         const initialState = {items: []}
         const item = {
-            id: '1',
+            id: "1",
             title: "Tea Cup",
             price: 5
         }
@@ -17,7 +17,7 @@ describe('CartContext', () => {
         expect(CartReducer(initialState, addToCart)).toEqual({
             items: [
                 {
-                    id: '1',
+                    id: "1",
                     title: "Tea Cup",
                     price: 5,
                     quantity: 1
@@ -26,15 +26,15 @@ describe('CartContext', () => {
         })
     })
 
-    it('increases the quantity of an existing item by 1', () => {
+    it("increases the quantity of an existing item by 1", () => {
         const initialState = {items: [ {
-                id: '1',
+                id: "1",
                 title: "Tea Cup",
                 price: 5,
                 quantity: 1
             }]}
         const item = {
-            id: '1',
+            id: "1",
             title: "Tea Cup",
             price: 5
         }
@@ -45,7 +45,7 @@ describe('CartContext', () => {
             {
                 items: [
                     {
-                        id: '1',
+                        id: "1",
                         title: "Tea Cup",
                         price: 5,
                         quantity: 1 + 1
@@ -55,7 +55,7 @@ describe('CartContext', () => {
         )
     })
 
-    it('removes an item from the cart', () => {
+    it("removes an item from the cart", () => {
         const initialState  = {items: [ {
                 id: "1",
                 title: "Tea Cup",
@@ -89,7 +89,7 @@ describe('CartContext', () => {
         )
     })
 
-    it('updates the quantity of an item', () => {
+    it("updates the quantity of an item", () => {
         const initialState  = {items: [ {
                 id: "1",
                 title: "Tea Cup",
@@ -128,7 +128,7 @@ describe('CartContext', () => {
         )
     })
 
-    it('clears the cart', () => {
+    it("clears the cart", () => {
         const initialState  = {items: [ {
                 id: "1",
                 title: "Tea Cup",
@@ -145,7 +145,5 @@ describe('CartContext', () => {
         const clearedCart = {type: "CLEAR_CART"}
         expect(CartReducer(initialState, clearedCart)).toEqual({items: []})
     })
-
-
     })
 
