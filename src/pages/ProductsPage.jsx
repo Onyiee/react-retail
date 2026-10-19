@@ -18,12 +18,6 @@ export default function ProductsPage() {
         queryFn: fetchProducts,
     });
 
-    const [state] = useCart();
-
-    const totalQuantity = state.items.reduce((acc, item) => {
-        return acc + item.quantity;
-    }, 0);
-
     if (isPending) {
         return (
             <main className="mx-auto max-w-7xl px-6 py-12">
@@ -46,26 +40,6 @@ export default function ProductsPage() {
 
     return (
         <div className="min-h-screen bg-slate-50">
-            <header className="border-b border-slate-200 bg-white">
-                <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-5">
-                    <Link
-                        to="/"
-                        className="text-2xl font-bold tracking-tight text-slate-900"
-                    >
-                        React Retail<span className="text-indigo-600">.</span>
-                    </Link>
-
-                    <Link
-                        to="/cart"
-                        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-50"
-                    >
-                        View Cart
-                        <span className="rounded-full bg-slate-900 px-2 py-0.5 text-xs text-white">
-              {totalQuantity}
-            </span>
-                    </Link>
-                </div>
-            </header>
 
             <main className="mx-auto max-w-7xl px-6 py-10 sm:py-14">
                 <section className="mb-10">

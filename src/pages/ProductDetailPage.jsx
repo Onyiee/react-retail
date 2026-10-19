@@ -40,12 +40,6 @@ export default function ProductDetailPage() {
                         ← Back to products
                     </Link>
 
-                    <Link
-                        to="/cart"
-                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"
-                    >
-                        View Cart ({totalQuantity})
-                    </Link>
                 </div>
 
                 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
