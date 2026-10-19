@@ -89,6 +89,11 @@ describe("ProductDetailPage", () => {
 
         const productTitle = await screen.findByText("Tea Cup");
         expect(productTitle).toBeInTheDocument();
+        const productImage = screen.getByRole("img", {
+            name: "Tea Cup",
+        });
+
+        expect(productImage).toBeInTheDocument();
 
         const productDescription = await screen.findByText(
             "A beautiful ceramic tea cup"
