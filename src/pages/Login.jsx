@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function LoginPage() {
@@ -8,12 +7,14 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         login();
-        navigate("/checkout", { replace: true });
-    };
+        navigate(location.state?.from?.pathname || "/checkout", {
+            replace: true,
+        });    };
 
     return (
         <div className="mx-auto max-w-md px-4 py-10">
