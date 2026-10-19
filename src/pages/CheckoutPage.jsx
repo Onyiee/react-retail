@@ -76,6 +76,7 @@ export default function CheckoutPage() {
                 <label className="block text-sm font-medium text-slate-700">
                     Name:
                     <input
+                    aria-label="Name"
                     type="text"
                     required
                     className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
