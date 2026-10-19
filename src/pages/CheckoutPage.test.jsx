@@ -1,11 +1,16 @@
 import CheckoutPage from "./CheckoutPage.jsx";
-import { it, expect, describe, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { it, expect, describe, vi, afterEach  } from "vitest";
+import { render, screen, fireEvent, waitFor,cleanup } from "@testing-library/react";
 import { CartProvider } from "../context/CartContext.jsx";
 import {
     QueryClient,
     QueryClientProvider,
 } from "@tanstack/react-query";
+
+afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+});
 
 describe("CheckoutPage", () => {
     it("renders the checkout form", () => {
@@ -93,6 +98,42 @@ describe("CheckoutPage", () => {
 
         const orderNumber = screen.getByText("Order number: #123");
         expect(orderNumber).toBeInTheDocument();
+
+    });
+
+    it("displays an error message when order submission fails", async () => {
+        vi.spyOn(globalThis, "fetch").mockResolvedValue({
+            ok: false,
+            json: async () => ({}),
+        });
+
+        const queryClient = new QueryClient();
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <CartProvider>
+                    <CheckoutPage />
+                </CartProvider>
+            </QueryClientProvider>
+        );
+        fireEvent.change(screen.getAllByRole("textbox")[0], {
+            target: { value: "Jane Doe" },
+        });
+
+        fireEvent.change(screen.getAllByRole("textbox")[1], {
+            target: { value: "jane@example.com" },
+        });
+
+        fireEvent.change(screen.getAllByRole("textbox")[2], {
+            target: { value: "Lagos, Nigeria" },
+        });
+
+        fireEvent.click(screen.getByRole("button", { name: "Place Order" }));
+
+        await waitFor(() => {
+            const errorMessage = screen.getByText("Failed to create order");
+            expect(errorMessage).toBeInTheDocument();
+        });
 
     });
 });
