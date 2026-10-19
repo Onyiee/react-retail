@@ -1,10 +1,11 @@
 import { it, expect, describe, vi, afterEach } from "vitest";
 import ProductsPage from "./ProductsPage.jsx";
-import { render, screen } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 
 afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
 });
 describe("ProductsPage", () => {
@@ -65,6 +66,39 @@ describe("ProductsPage", () => {
         const productPrice = await screen.findByText("$5.00");
         expect(productPrice).toBeInTheDocument();
     })
+
+
+    it("shows an empty state when no products are available", async () => {
+        vi.spyOn(globalThis, "fetch").mockResolvedValue({
+            ok: true,
+            json: async () => {
+                console.log("Returning empty products");
+                return [];
+            },        });
+
+        const queryClient = new QueryClient({
+            defaultOptions: {
+                queries: {
+                    retry: false,
+                },
+            },
+        });
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <MemoryRouter>
+                    <ProductsPage />
+                </MemoryRouter>
+            </QueryClientProvider>
+        );
+
+        const emptyMessage = await screen.findByText(
+            "No products are available right now. Please check back later."
+        );
+
+        expect(emptyMessage).toBeInTheDocument();
+    });
+
 
     it("shows an error message when fetching products fails", async () => {
         vi.spyOn(globalThis, "fetch").mockResolvedValue({

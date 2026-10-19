@@ -60,15 +60,22 @@ export default function ProductsPage() {
                     </p>
                 </section>
 
-                <section
-                    aria-label="Product catalogue"
-                    className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                >
+                {data.length === 0 ? (
+                    <p
+                        className="rounded-xl border border-slate-200 bg-white px-6 py-12 text-center text-slate-600"
+                        role="status"
+                    >
+                        No products are available right now. Please check back later.
+                    </p>
+                ) : (
+                    <section
+                        aria-label="Product catalogue"
+                        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    >
                     {data.map((product) => (
                         <Link
                             key={product.id}
                             to={`/products/${product.id}`}
-                            onClick={() => console.log("Product clicked:", product.id)}
                             className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2"
                         >
                             <div className="flex h-56 items-center justify-center overflow-hidden bg-slate-100 p-5">
@@ -102,6 +109,7 @@ export default function ProductsPage() {
                         </Link>
                     ))}
                 </section>
+            )}
             </main>
 
             <footer className="mt-12 border-t border-slate-200 bg-white">
