@@ -60,4 +60,24 @@ describe("LoginPage", () => {
 
         expect(screen.getByText("/checkout")).toBeInTheDocument();
     });
-});
+
+    it("does not submit when the required fields are empty", async () => {
+        const user = userEvent.setup();
+        render (
+            <MemoryRouter>
+                <AuthProvider>
+                    <LoginPage />
+                </AuthProvider>
+            </MemoryRouter>
+        )
+
+        const loginButton = screen.getByRole("button", {
+            name: "Log in",
+        });
+        await user.click(loginButton);
+        const email = screen.getByLabelText("Email");
+        expect(email).toBeInvalid();
+
+    })
+
+    });
