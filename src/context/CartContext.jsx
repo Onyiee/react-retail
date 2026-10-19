@@ -4,14 +4,12 @@ const CartContext = createContext(null);
 const initialCartState = {items: []}
 
 export function CartReducer(state, action) {
-    console.log("Cart action:", action);
     switch (action.type) {
         case "ADD_ITEM": {
             const existingItem = state.items.find((item) => item.id === action.payload.id);
             if (!existingItem) {
                 const newItem = {...action.payload, quantity: 1}
                 const updatedItems = [...state.items, newItem];
-                console.log("Updated cart items:", updatedItems);
                 return {
                     items: updatedItems,
                 };
@@ -65,7 +63,6 @@ export function CartReducer(state, action) {
 
 export function CartProvider ({children}) {
     const [state, dispatch] = useReducer(CartReducer, initialCartState);
-    console.log("Current cart state:", state);
 
     return (
         <CartContext.Provider value={[state, dispatch]}>
