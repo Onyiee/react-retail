@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx";
 
 const fetchProducts = async () => {
     const res = await fetch("http://localhost:5174/api/products");
