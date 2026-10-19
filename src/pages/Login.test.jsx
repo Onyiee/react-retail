@@ -79,4 +79,30 @@ describe("LoginPage", () => {
 
     })
 
+
+    it("returns the user to their originally requested page after login", async () => {
+        const user = userEvent.setup();
+
+        render(
+            <MemoryRouter initialEntries={[
+                {
+                    pathname: "/login",
+                    state: { from: { pathname: "/cart" } },
+                },
+            ]}>
+                <AuthProvider>
+                    <LoginPage />
+                    <LocationDisplay />
+                </AuthProvider>
+            </MemoryRouter>
+        );
+
+        await user.type(screen.getByLabelText("Email"), "example@email.com");
+        await user.type(screen.getByLabelText("Password"), "Password123!");
+        await user.click(screen.getByRole("button", { name: "Log in" }));
+
+        expect(screen.getByText("/cart")).toBeInTheDocument();
     });
+
+
+});
