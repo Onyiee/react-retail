@@ -1,9 +1,13 @@
 import CartPage from "./CartPage.jsx";
-import { it, expect, describe } from "vitest";
-import {fireEvent, render, screen} from "@testing-library/react";
+import { it, expect, describe, afterEach } from "vitest";
+import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import {CartProvider, CartReducer, useCart} from "../context/CartContext.jsx";
 import {createContext, useEffect, useReducer} from "react";
+
+afterEach(() => {
+    cleanup();
+});
 
 function AddProductToCart({ product }) {
     const [, dispatch] = useCart();
@@ -43,7 +47,6 @@ describe("CartPage", () => {
             id: "1",
             title: "Tea Cup",
             price: 5,
-            quantity: 2,
         };
         render(
             <CartProvider>
@@ -92,6 +95,50 @@ describe("CartPage", () => {
         const updatedCartTotals = screen.getAllByText("$10.00");
         expect(updatedCartTotals).toHaveLength(2);
 
-
     });
+
+    it("removes an item from the cart when the Remove button is clicked", () => {
+        const product = {
+            id: "1",
+            title: "Tea Cup",
+            price: 5,
+        };
+
+        render(
+            <CartProvider>
+                <MemoryRouter>
+                    <AddProductToCart product={product} />
+                    <CartPage />
+                </MemoryRouter>
+            </CartProvider>
+        );
+
+        fireEvent.click(screen.getByRole("button", { name: "Remove" }));
+
+        expect(screen.getByText("Your cart is empty.")).toBeInTheDocument();
+    });
+
+    it("decreases the item quantity when the minus button is clicked", () => {
+        const product = {
+            id: "1",
+            title: "Tea Cup",
+            price: 5,
+        };
+
+        render(
+            <CartProvider>
+                <MemoryRouter>
+                    <AddProductToCart product={product} />
+                    <CartPage />
+                </MemoryRouter>
+            </CartProvider>
+        );
+
+        fireEvent.click(screen.getByRole("button", { name: "+" }));
+        fireEvent.click(screen.getByRole("button", { name: "-" }));
+
+        expect(screen.getByText("1", { selector: "p" })).toBeInTheDocument();
+    });
+
+
 });
