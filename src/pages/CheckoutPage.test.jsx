@@ -1,7 +1,16 @@
+
 import CheckoutPage from "./CheckoutPage.jsx";
-import { it, expect, describe, vi, afterEach  } from "vitest";
-import { render, screen, fireEvent, waitFor,cleanup } from "@testing-library/react";
-import { CartProvider } from "../context/CartContext.jsx";
+import { it, expect, describe, vi, afterEach } from "vitest";
+import {
+    render,
+    screen,
+    fireEvent,
+    waitFor,
+    cleanup,
+} from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { CartProvider, useCart } from "../context/CartContext.jsx";
+import { useEffect } from "react";
 import {
     QueryClient,
     QueryClientProvider,
@@ -12,37 +21,58 @@ afterEach(() => {
     vi.restoreAllMocks();
 });
 
-describe("CheckoutPage", () => {
-    it("renders the checkout form", () => {
+function SeedCart({ children }) {
+    const [, dispatch] = useCart();
 
-        const queryClient = new QueryClient({
-            defaultOptions: {
-                queries: {
-                    retry: false,
-                },
+    useEffect(() => {
+        dispatch({
+            type: "ADD_ITEM",
+            payload: {
+                id: "1",
+                title: "Tea Cup",
+                price: 5,
             },
         });
-        render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <CheckoutPage />
-                </CartProvider>
-            </QueryClientProvider>
-        );
-        const checkoutHeading = screen.getByRole("heading", {
-            name: "Checkout",
-        });
-        expect(checkoutHeading).toBeInTheDocument();
+    }, [dispatch]);
 
-        const nameInput = screen.getByRole("textbox", {
-            name: /name/i,
-        });
-        expect(nameInput).toBeInTheDocument();
+    return children;
+}
+
+function renderCheckout() {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: { retry: false },
+            mutations: { retry: false },
+        },
+    });
+
+    return render(
+        <QueryClientProvider client={queryClient}>
+            <CartProvider>
+                <MemoryRouter>
+                    <SeedCart>
+                        <CheckoutPage />
+                    </SeedCart>
+                </MemoryRouter>
+            </CartProvider>
+        </QueryClientProvider>
+    );
+}
+
+describe("CheckoutPage", () => {
+    it("renders the checkout form", async () => {
+        renderCheckout();
+
+        expect(
+            screen.getByRole("heading", { name: "Checkout" })
+        ).toBeInTheDocument();
+
+        expect(
+            await screen.findByRole("textbox", { name: /name/i })
+        ).toBeInTheDocument();
     });
 
     it("places an order and displays a success message", async () => {
-        const queryClient = new QueryClient();
-
         vi.spyOn(globalThis, "fetch").mockResolvedValue({
             ok: true,
             json: async () => ({
@@ -63,42 +93,38 @@ describe("CheckoutPage", () => {
             }),
         });
 
-        render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <CheckoutPage />
-                </CartProvider>
-            </QueryClientProvider>
+        renderCheckout();
+
+        fireEvent.change(
+            await screen.findByRole("textbox", { name: /name/i }),
+            { target: { value: "Jane Doe" } }
         );
 
-        const nameInput = screen.getAllByRole("textbox")[0];
+        fireEvent.change(
+            screen.getByRole("textbox", { name: /email/i }),
+            { target: { value: "jane@example.com" } }
+        );
 
-        fireEvent.change(nameInput, { target: { value: "Jane Doe" },
-        });
+        fireEvent.change(
+            screen.getByRole("textbox", { name: /address/i }),
+            { target: { value: "Lagos, Nigeria" } }
+        );
 
-        const emailInput = screen.getAllByRole("textbox")[1];
+        fireEvent.click(
+            screen.getByRole("button", { name: "Place Order" })
+        );
 
-        fireEvent.change(emailInput, {
-            target: { value: "jane@example.com" },
-        });
+        expect(
+            await screen.findByText("Order placed successfully!")
+        ).toBeInTheDocument();
 
-        const addressInput = screen.getAllByRole("textbox")[2];
+        expect(
+            screen.getByText("Order number: #123")
+        ).toBeInTheDocument();
 
-        fireEvent.change(addressInput, {
-            target: { value: "Lagos, Nigeria" },
-        });
-
-        fireEvent.click(screen.getAllByRole("button", { name: "Place Order" })[0]);
-
-        await waitFor(() => {
-            expect(
-                screen.getByText("Order placed successfully!")
-            ).toBeInTheDocument();
-        });
-
-        const orderNumber = screen.getByText("Order number: #123");
-        expect(orderNumber).toBeInTheDocument();
-
+        expect(
+            screen.getByText("Order total: $5.00")
+        ).toBeInTheDocument();
     });
 
     it("displays an error message when order submission fails", async () => {
@@ -107,33 +133,29 @@ describe("CheckoutPage", () => {
             json: async () => ({}),
         });
 
-        const queryClient = new QueryClient();
+        renderCheckout();
 
-        render(
-            <QueryClientProvider client={queryClient}>
-                <CartProvider>
-                    <CheckoutPage />
-                </CartProvider>
-            </QueryClientProvider>
+        fireEvent.change(
+            await screen.findByRole("textbox", { name: /name/i }),
+            { target: { value: "Jane Doe" } }
         );
-        fireEvent.change(screen.getAllByRole("textbox")[0], {
-            target: { value: "Jane Doe" },
-        });
 
-        fireEvent.change(screen.getAllByRole("textbox")[1], {
-            target: { value: "jane@example.com" },
-        });
+        fireEvent.change(
+            screen.getByRole("textbox", { name: /email/i }),
+            { target: { value: "jane@example.com" } }
+        );
 
-        fireEvent.change(screen.getAllByRole("textbox")[2], {
-            target: { value: "Lagos, Nigeria" },
-        });
+        fireEvent.change(
+            screen.getByRole("textbox", { name: /address/i }),
+            { target: { value: "Lagos, Nigeria" } }
+        );
 
-        fireEvent.click(screen.getByRole("button", { name: "Place Order" }));
+        fireEvent.click(
+            screen.getByRole("button", { name: "Place Order" })
+        );
 
-        await waitFor(() => {
-            const errorMessage = screen.getByText("Failed to create order");
-            expect(errorMessage).toBeInTheDocument();
-        });
-
+        expect(
+            await screen.findByRole("alert")
+        ).toHaveTextContent("Failed to create order");
     });
 });

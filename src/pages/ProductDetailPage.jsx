@@ -13,11 +13,9 @@ const fetchProduct = async (id)=> {
 
 export default function ProductDetailPage() {
     const [state, dispatch] = useCart();
-
-    const totalQuantity = state.items.reduce((acc, item) => {
+    state.items.reduce((acc, item) => {
         return acc + item.quantity;
     }, 0);
-
     const { id } = useParams();
 
     const {data, isPending, error} = useQuery({

@@ -19,18 +19,18 @@ export default function Header() {
 
     return (
         <header className="border-b border-slate-200 bg-white">
-            <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
                 <Link
                     to="/"
-                    className="text-xl font-bold text-slate-900"
+                    className="shrink-0 whitespace-nowrap text-xl font-bold text-slate-900"
                 >
                     React Retail
                 </Link>
 
-                <div className="flex items-center gap-4">
+                <div className="flex min-w-0 items-center gap-3 sm:gap-4">
                     <Link
                         to="/"
-                        className="text-sm font-medium text-slate-700 hover:text-slate-950"
+                        className="shrink-0 whitespace-nowrap text-sm font-medium text-slate-700 hover:text-slate-950"
                     >
                         Products
                     </Link>
@@ -38,10 +38,15 @@ export default function Header() {
 
                     <Link
                         to="/cart"
-                        className="flex items-center gap-2 text-sm font-medium text-slate-700 transition-colors hover:text-slate-950"
+                        className="shrink-0 whitespace-nowrap flex items-center gap-2 text-sm font-medium text-slate-700 transition-colors hover:text-slate-950"
                     >
                         Cart
-                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1.5 text-xs font-semibold text-white">
+                        <span
+                            aria-label={`${totalQuantity} ${
+                                totalQuantity === 1 ? "item" : "items"
+                            }`}
+                            className="flex h-5 min-w-5 items-center justify-center rounded-full bg-slate-900 px-1.5 text-xs font-semibold text-white"
+                        >
                             {totalQuantity}
                         </span>
                     </Link>
@@ -51,14 +56,14 @@ export default function Header() {
                         <button
                             type="button"
                             onClick={handleLogout}
-                            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+                            className="shrink-0 whitespace-nowrap rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700"
                         >
                             Log out
                         </button>
                     ) : (
                         <Link
                             to="/login"
-                            className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-500"
+                            className="shrink-0 whitespace-nowrap rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-amber-500"
                         >
                             Log in
                         </Link>
