@@ -104,5 +104,6 @@ Vite generates the production assets in the `dist` directory.
 Potential enhancements include deploying the application, adding persistent cart storage, and integrating a real authentication service and persistent backend.
 
 ## Author
+Elizabeth Onyemowo Agbo
 
 Built as part of the Intermediate React course capstone project.
