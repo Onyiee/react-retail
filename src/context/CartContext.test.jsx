@@ -1,7 +1,6 @@
 import { it, expect, describe } from 'vitest';
 import {CartReducer} from "./CartContext.jsx";
 
-
 describe("CartContext", () => {
     it("adds a new item to the cart with a quantity of 1", () => {
         const initialState = {items: []}

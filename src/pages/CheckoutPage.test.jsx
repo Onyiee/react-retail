@@ -1,11 +1,9 @@
-
 import CheckoutPage from "./CheckoutPage.jsx";
 import { it, expect, describe, vi, afterEach } from "vitest";
 import {
     render,
     screen,
     fireEvent,
-    waitFor,
     cleanup,
 } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";

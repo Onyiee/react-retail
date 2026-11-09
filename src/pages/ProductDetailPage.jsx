@@ -10,7 +10,6 @@ const fetchProduct = async (id)=> {
     return await res.json();
 }
 
-
 export default function ProductDetailPage() {
     const [state, dispatch] = useCart();
     state.items.reduce((acc, item) => {
@@ -25,7 +24,6 @@ export default function ProductDetailPage() {
 
     if(isPending) return <p className="p-6 text-slate-600">Loading product…</p>
     if (error) return <p className="p-6 text-red-600">Error: {error.message} </p>
-
 
     return (
         <div className="min-h-screen bg-slate-50">

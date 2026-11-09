@@ -2,7 +2,7 @@ import CartPage from "./CartPage.jsx";
 import { it, expect, describe, afterEach } from "vitest";
 import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import {CartProvider, CartReducer, useCart} from "../context/CartContext.jsx";
+import {CartProvider, useCart} from "../context/CartContext.jsx";
 import { useEffect } from "react";
 
 afterEach(() => {

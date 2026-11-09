@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useCart } from "../context/CartContext.jsx";
 
-
 export default function Header() {
     const [state] = useCart();
     const { isAuthenticated, logout } = useAuth();
