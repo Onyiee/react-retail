@@ -1,4 +1,4 @@
-# React Retail
+# Cartwise
 
 A responsive e-commerce application built with React as the capstone project for Udacity's Intermediate React course. The application allows users to browse products, view product details, manage a shopping cart, log in through a simulated authentication flow, and place orders.
 
