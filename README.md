@@ -38,8 +38,8 @@ A responsive e-commerce application built with React as the capstone project for
 Clone the repository and navigate into the project directory:
 
 ```bash
-git clone https://github.com/Onyiee/react-retail
-cd react-retail
+git clone https://github.com/Onyiee/cartwise
+cd cartwise
 npm install
 ```
 
